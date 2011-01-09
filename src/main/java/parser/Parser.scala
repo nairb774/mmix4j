@@ -70,7 +70,7 @@ object Parser extends StandardTokenParsers {
 
   val specialRegister = (specialRegisterNames map { _ ^^ { name => SpecialRegister.withName(name) } }).reduceLeft(_ | _)
 
-  def lineNumberInfo = "#" ~> numericLit ~ stringLit ^^ { case line ~ file => println(file + " " + line); Noop }
+  def lineNumberInfo = "#" ~> numericLit ~ stringLit ^^^ Noop
   def bang = "!" ~ ident ~ "=" ~ numericLit ~ ident ~ "LOC" ~ ident ^^^ Noop // ! mmixal:= 8H LOC Data_Section
   def data = ".data" ~ "!" ~ ident ~ "=" ~ numericLit ~ ident ~ "LOC" ~ numericLit ~ ident ^^^ Noop // .data ! mmixal:= 8H LOC 9B
   def global = ".global" ~ ident ^^ { case _ ~ name => Global(Label(name)) }
