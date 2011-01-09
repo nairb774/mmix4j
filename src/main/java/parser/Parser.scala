@@ -147,7 +147,7 @@ object Parser extends StandardTokenParsers {
         parse(line) match {
           case Success(tree, _) => tree
           case e: NoSuccess =>
-            throw new IllegalArgumentException("Bad syntax at line: " + lineNum + "\n" + line)
+            throw new IllegalArgumentException("Bad syntax at line: " + (lineNum + 1) + "\n" + line)
         }
     } filter (_ != Noop) toList
   }
