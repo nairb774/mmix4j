@@ -74,6 +74,13 @@ object TransformerSpec extends Specification {
       Transformer(insns).registers mustEqual Map(Register(0) -> SubtractUnsigned(Constant(1), Input(Register(2))))
     }
   }
+  "PUT" should {
+    "copy a register to another register" >> {
+      val insns = List(
+        PUT(SpecialRegister.rR, Register(1)))
+      Transformer(insns).specialRegisters mustEqual Map(SpecialRegister.rR -> Input(Register(1)))
+    }
+  }
   "SET" should {
     "copy a register to another register" >> {
       val insns = List(

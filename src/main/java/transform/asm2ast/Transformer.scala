@@ -45,6 +45,7 @@ class Transformer private (
     case GET(dest, src) => assign(dest -> specialRegisters(src))
     case GETA(dest, label) => assign(dest -> GetAddress(label))
     case NEGU(dest, l, r) => assign(dest -> SubtractUnsigned(Constant(l), registers(r)))
+    case PUT(dest, src) => special(dest -> registers(src))
     case SET(dest, src) => assign(dest -> registers(src))
     case SETL(dest, value) => assign(dest -> Constant(value.toLong & 0xFFFFL))
     case SLU(dest, number, amount) => assign(dest -> ShiftLeftUnsigned(registers(number), registers(amount)))
