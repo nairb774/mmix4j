@@ -142,7 +142,7 @@ object Parser extends StandardTokenParsers {
   }
 
   def apply(file: File): List[ASM] = {
-    Source.fromFile(file, "ASCII").getLines.zipWithIndex map {
+    Source.fromFile(file, "ASCII").getLines.zipWithIndex filter (!_._1.trim.isEmpty) map {
       case (line, lineNum) =>
         parse(line) match {
           case Success(tree, _) => tree
