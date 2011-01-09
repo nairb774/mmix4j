@@ -118,7 +118,7 @@ object Parser extends StandardTokenParsers {
   def pushj = "PUSHJ" ~> rl(PUSHJ)
   def put = "PUT" ~> specialRegister ~ "," ~ reg ^^ { case dest ~ _ ~ src => PUT(dest, src) }
   def set = "SET" ~> rr(SET)
-  def setl = "SETL" ~> rn(SETL)
+  def setl = "SETL" ~> rn((dest, n) => SETL(dest, n.toShort))
   def slu = "SLU" ~> rrr(SLU)
   def slui = "SLU" ~> rrn(SLUI)
   def sr = "SR" ~> (rrr(SR) | rrn(SRI))

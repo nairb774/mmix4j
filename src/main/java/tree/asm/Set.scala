@@ -13,4 +13,4 @@ case class PUT(dest: SpecialRegister.Value, srg: Register) extends ASM
 case class SET(dest: Register, src: Register) extends ASM
 
 /** set to low wyde (3) */
-case class SETL(reg: Register, value: Int) extends ASM
+case class SETL(reg: Register, value: Short) extends ASM
