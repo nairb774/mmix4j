@@ -7,7 +7,7 @@ case class CSN(dest: Register, test: Register, src: Register) extends ASM
 case class CSNN(dest: Register, test: Register, src: Register) extends ASM
 
 /** put into special register (X=specreg, Y=0, Z=register) rA-rZZ */
-case class PUT(dest: SpecialRegister.Value, srg: Register) extends ASM
+case class PUT(dest: Register, srg: Register) extends ASM
 
 /** undocumeted */
 case class SET(dest: Register, src: Register) extends ASM

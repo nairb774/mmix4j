@@ -95,10 +95,10 @@ object ParserSpec extends Specification {
     parse("DIVU $3,$3,$8", DIVU(Register(3), Register(3), Register(8)))
   }
   "GET" should {
-    parse("GET $4,rJ", GET(Register(4), SpecialRegister.rJ))
-    parse("GET $6,rJ", GET(Register(6), SpecialRegister.rJ))
-    parse("GET $9,rJ", GET(Register(9), SpecialRegister.rJ))
-    parse("GET $9,rR", GET(Register(9), SpecialRegister.rR))
+    parse("GET $4,rJ", GET(Register(4), Register(SpecialRegister.rJ)))
+    parse("GET $6,rJ", GET(Register(6), Register(SpecialRegister.rJ)))
+    parse("GET $9,rJ", GET(Register(9), Register(SpecialRegister.rJ)))
+    parse("GET $9,rR", GET(Register(9), Register(SpecialRegister.rR)))
   }
   "GETA" should {
     parse("GETA $2,puts", GETA(Register(2), Label("puts")))
@@ -162,9 +162,9 @@ object ParserSpec extends Specification {
     parse("PUSHJ $9,putchar", PUSHJ(Register(9), Label("putchar")))
   }
   "PUT" should {
-    parse("PUT rJ,$4", PUT(SpecialRegister.rJ, Register(4)))
-    parse("PUT rJ,$6", PUT(SpecialRegister.rJ, Register(6)))
-    parse("PUT rJ,$9", PUT(SpecialRegister.rJ, Register(9)))
+    parse("PUT rJ,$4", PUT(Register(SpecialRegister.rJ), Register(4)))
+    parse("PUT rJ,$6", PUT(Register(SpecialRegister.rJ), Register(6)))
+    parse("PUT rJ,$9", PUT(Register(SpecialRegister.rJ), Register(9)))
   }
   "POP" should {
     parse("POP 0,0", POP(0))

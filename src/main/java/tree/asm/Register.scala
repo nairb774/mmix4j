@@ -1,8 +1,10 @@
 package tree.asm
 
 object Register {
-  private val all = 0 until 256 map (new Register(_))
+  private val special: Array[Register] = SpecialRegister.values.toArray sortBy (_.id) map { v => new Register(256 + v.id) }
+  private val all: Array[Register] = 0.until(256).toArray.map(new Register(_)) ++ special
   def apply(n: Int) = all(n)
+  def apply(s: SpecialRegister.Value) = special(s.id)
   def unapply(r: Register) = Some(r.n)
 }
 class Register private (val n: Int) {

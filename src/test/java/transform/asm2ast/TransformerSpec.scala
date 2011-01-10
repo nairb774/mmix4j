@@ -61,26 +61,21 @@ object TransformerSpec extends Specification {
       Transformer(insns).registers mustEqual Map(
         Register(0) -> ConditionallySetIfGreater(
           Input(Register(2)),
-          SpecialInput(SpecialRegister.rD),
-          DivideUnsigned(SpecialInput(SpecialRegister.rD), Input(Register(1)), Input(Register(2))),
-          SpecialInput(SpecialRegister.rD)))
-    }
-    "become ModUnsigned" >> {
-      val insns = List(
-        DIVU(Register(0), Register(1), Register(2)))
-      Transformer(insns).specialRegisters mustEqual Map(
-        SpecialRegister.rR -> ConditionallySetIfGreater(
+          Input(Register(SpecialRegister.rD)),
+          DivideUnsigned(Input(Register(SpecialRegister.rD)), Input(Register(1)), Input(Register(2))),
+          Input(Register(SpecialRegister.rD))),
+        Register(SpecialRegister.rR) -> ConditionallySetIfGreater(
           Input(Register(2)),
-          SpecialInput(SpecialRegister.rD),
-          ModUnsigned(SpecialInput(SpecialRegister.rD), Input(Register(1)), Input(Register(2))),
+          Input(Register(SpecialRegister.rD)),
+          ModUnsigned(Input(Register(SpecialRegister.rD)), Input(Register(1)), Input(Register(2))),
           Input(Register(1))))
     }
   }
   "GET" should {
     "copy a special register to a normal register" >> {
       val insns = List(
-        GET(Register(0), SpecialRegister.rR))
-      Transformer(insns).registers mustEqual Map(Register(0) -> SpecialInput(SpecialRegister.rR))
+        GET(Register(0), Register(SpecialRegister.rR)))
+      Transformer(insns).registers mustEqual Map(Register(0) -> Input(Register(SpecialRegister.rR)))
     }
   }
   "GETA" should {
@@ -119,8 +114,8 @@ object TransformerSpec extends Specification {
   "PUT" should {
     "copy a register to another register" >> {
       val insns = List(
-        PUT(SpecialRegister.rR, Register(1)))
-      Transformer(insns).specialRegisters mustEqual Map(SpecialRegister.rR -> Input(Register(1)))
+        PUT(Register(SpecialRegister.rR), Register(1)))
+      Transformer(insns).registers mustEqual Map(Register(SpecialRegister.rR) -> Input(Register(1)))
     }
   }
   "SET" should {

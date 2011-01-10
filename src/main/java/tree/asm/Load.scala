@@ -1,7 +1,7 @@
 package tree.asm
 
 /** get from special register (X=register, Y=0, Z=specreg) rA-rZZ */
-case class GET(reg: Register, special: SpecialRegister.Value) extends ASM
+case class GET(reg: Register, special: Register) extends ASM
 
 /** get address (3) */
 case class GETA(reg: Register, label: Label) extends ASM

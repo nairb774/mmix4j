@@ -68,7 +68,7 @@ object Parser extends StandardTokenParsers {
   lexical.reserved += ("Data_section")
   lexical.delimiters += ("@+(4-@)&3")
 
-  val specialRegister = (specialRegisterNames map { _ ^^ { name => SpecialRegister.withName(name) } }).reduceLeft(_ | _)
+  val specialRegister = (specialRegisterNames map { _ ^^ { name => Register(SpecialRegister.withName(name)) } }).reduceLeft(_ | _)
 
   def lineNumberInfo = "#" ~> numericLit ~ stringLit ^^^ Noop
   def bang = "!" ~ ident ~ "=" ~ numericLit ~ ident ~ "LOC" ~ ident ^^^ Noop // ! mmixal:= 8H LOC Data_Section
