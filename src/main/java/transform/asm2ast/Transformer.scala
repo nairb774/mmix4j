@@ -1,11 +1,11 @@
 package transform.asm2ast
 
-import transform.asm.LabelCollector
+import transform.asm.Divergence.Diverge
 import tree.asm._
 import tree.ast._
 
 /**
- * Expects to transform a single label worth of instructions at a time
+ * Expects to transform a single label worth of instructions at a time (post divergence)
  */
 object Transformer {
   val root = new Transformer(
@@ -35,6 +35,13 @@ class Transformer private (
   private def apply(insn: ASM): Transformer = insn match {
     case ADDU(dest, l, r) => assign(dest -> AddUnsigned(registers(l), registers(r)))
     case ADDUI(dest, src, constant) => assign(dest -> AddUnsigned(registers(src), Constant(constant)))
+    case Diverge(insn, ifFalse) =>
+      insn match {
+        case BZ(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfZero(registers(reg), ifTrue, ifFalse)))
+        case PBN(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfNegative(registers(reg), ifTrue, ifFalse)))
+        case PBNZ(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfNonZero(registers(reg), ifTrue, ifFalse)))
+        case PBP(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfPositive(registers(reg), ifTrue, ifFalse)))
+      }
     case DIVU(dest, n, d) =>
       val rD = specialRegisters(SpecialRegister.rD)
       val denominator = registers(d)

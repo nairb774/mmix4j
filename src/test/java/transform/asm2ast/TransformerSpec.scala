@@ -4,6 +4,7 @@ import org.specs._
 import org.specs.runner.JUnit4
 import tree.asm._
 import tree.ast._
+import transform.asm.Divergence.Diverge
 
 class TransformerTest extends JUnit4(TransformerSpec)
 object TransformerSpec extends Specification {
@@ -29,6 +30,28 @@ object TransformerSpec extends Specification {
       val insns = List(
         ADDUI(Register(0), Register(0), 2))
       Transformer(insns).registers mustEqual Map(Register(0) -> AddUnsigned(Input(Register(0)), Constant(2)))
+    }
+  }
+  "Diverge" should {
+    "with a BZ results in a pinned BranchIfZero" >> {
+      val insns = List(
+        Diverge(BZ(Register(0), Label("T")), Label("F")))
+      Transformer(insns).pinned.last mustEqual BranchIfZero(Input(Register(0)), Label("T"), Label("F"))
+    }
+    "with a PBN results in a pinned BranchIfNegative" >> {
+      val insns = List(
+        Diverge(PBN(Register(0), Label("T")), Label("F")))
+      Transformer(insns).pinned.last mustEqual BranchIfNegative(Input(Register(0)), Label("T"), Label("F"))
+    }
+    "with a PBNZ results in a pinned BranchIfNonZero" >> {
+      val insns = List(
+        Diverge(PBNZ(Register(0), Label("T")), Label("F")))
+      Transformer(insns).pinned.last mustEqual BranchIfNonZero(Input(Register(0)), Label("T"), Label("F"))
+    }
+    "with a PBP results in a pinned BranchIfPositive" >> {
+      val insns = List(
+        Diverge(PBP(Register(0), Label("T")), Label("F")))
+      Transformer(insns).pinned.last mustEqual BranchIfPositive(Input(Register(0)), Label("T"), Label("F"))
     }
   }
   "DIVU" should {
