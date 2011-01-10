@@ -21,6 +21,10 @@ object Divergence {
           // No diverge for jumps, we want to trim the insn stream at them though 
           val newLabel = Label(UUID.randomUUID.toString)
           List(newLabel) :: (insn :: list.head) :: list.tail
+        case _: POP =>
+          // No diverge for pops, we want to trim the insn stream at them though 
+          val newLabel = Label(UUID.randomUUID.toString)
+          List(newLabel) :: (insn :: list.head) :: list.tail
         case _ => (insn :: list.head) :: list.tail
       }
     } map { l =>
