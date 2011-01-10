@@ -104,6 +104,18 @@ object TransformerSpec extends Specification {
       Transformer(insns).registers mustEqual Map(Register(0) -> SubtractUnsigned(Constant(1), Input(Register(2))))
     }
   }
+  "POP" should {
+    "result in a pinned Return" >> {
+      val insns = List(
+        POP(0))
+      Transformer(insns).pinned.last mustEqual Return0
+    }
+    "result in a pinned Return" >> {
+      val insns = List(
+        POP(1))
+      Transformer(insns).pinned.last mustEqual Return1(Input(Register(0)))
+    }
+  }
   "PUT" should {
     "copy a register to another register" >> {
       val insns = List(

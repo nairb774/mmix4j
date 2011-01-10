@@ -53,6 +53,8 @@ class Transformer private (
     case GETA(dest, label) => assign(dest -> GetAddress(label))
     case JMP(label) => copy(pinned = pinned ::: List(Jump(label)))
     case NEGU(dest, l, r) => assign(dest -> SubtractUnsigned(Constant(l), registers(r)))
+    case POP(0) => copy(pinned = pinned ::: List(Return0))
+    case POP(1) => copy(pinned = pinned ::: List(Return1(registers(Register(0)))))
     case PUT(dest, src) => special(dest -> registers(src))
     case SET(dest, src) => assign(dest -> registers(src))
     case SETL(dest, value) => assign(dest -> Constant(value.toLong & 0xFFFFL))
