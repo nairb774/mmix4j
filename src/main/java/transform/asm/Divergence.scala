@@ -29,6 +29,8 @@ object Divergence {
           List(newLbl) :: (insn :: list.head) :: list.tail
         case _ => (insn :: list.head) :: list.tail
       }
+    } filter {
+      _.size > 1
     } map { l =>
       val t = l.reverse
       t.head.asInstanceOf[Label] -> t.tail

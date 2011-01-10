@@ -25,14 +25,18 @@ object DivergenceSpec extends Specification {
       Divergence(Label("A"), insns)(Label("A")) mustEqual List(SET(Register(0), Register(1)), JMP(Label("B")))
     }
     "result in another label" >> {
-      val insns = List(JMP(Label("B")))
+      val insns = List(
+        JMP(Label("B")),
+        SET(Register(1), Register(2)))
       val result = Divergence(Label("A"), insns) - Label("A")
       result.size mustEqual 1
     }
     "resut in another label that is empty" >> {
-      val insns = List(JMP(Label("B")))
+      val insns = List(
+        JMP(Label("B")),
+        SET(Register(1), Register(2)))
       val result = Divergence(Label("A"), insns) - Label("A")
-      result.head._2 mustEqual Nil
+      result.head._2 mustEqual List(SET(Register(1), Register(2)))
     }
   }
   "POP" should {
@@ -44,14 +48,18 @@ object DivergenceSpec extends Specification {
       Divergence(Label("A"), insns)(Label("A")) mustEqual List(SET(Register(0), Register(1)), POP(0))
     }
     "result in another label" >> {
-      val insns = List(POP(0))
+      val insns = List(
+        POP(0),
+        SET(Register(1), Register(2)))
       val result = Divergence(Label("A"), insns) - Label("A")
       result.size mustEqual 1
     }
     "resut in another label that is empty" >> {
-      val insns = List(POP(0))
+      val insns = List(
+        POP(0),
+        SET(Register(1), Register(2)))
       val result = Divergence(Label("A"), insns) - Label("A")
-      result.head._2 mustEqual Nil
+      result.head._2 mustEqual List(SET(Register(1), Register(2)))
     }
   }
   "BZ" should {
