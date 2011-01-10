@@ -90,4 +90,22 @@ object DivergenceSpec extends Specification {
       Divergence(Label("A"), insns) must matchDivergence(Label("A") -> PBP(Register(2), Label("B")))
     }
   }
+  "PUSHGO" should {
+    "result in a Diverge" >> {
+      val insns = List(
+        SET(Register(0), Register(1)),
+        PUSHGO(Register(2), Register(3)),
+        SET(Register(1), Register(2)))
+      Divergence(Label("A"), insns) must matchDivergence(Label("A") -> PUSHGO(Register(2), Register(3)))
+    }
+  }
+  "PUSHJ" should {
+    "result in a Diverge" >> {
+      val insns = List(
+        SET(Register(0), Register(1)),
+        PUSHJ(Register(2), Label("B")),
+        SET(Register(1), Register(2)))
+      Divergence(Label("A"), insns) must matchDivergence(Label("A") -> PUSHJ(Register(2), Label("B")))
+    }
+  }
 }
