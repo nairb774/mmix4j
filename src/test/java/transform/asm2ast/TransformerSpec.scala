@@ -151,6 +151,13 @@ object TransformerSpec extends Specification {
       Transformer(insns).registers mustEqual Map(Register(0) -> ShiftLeftUnsigned(Input(Register(1)), Constant(2)))
     }
   }
+  "SRI" should {
+    "become ShiftRight" >> {
+      val insns = List(
+        SRI(Register(0), Register(1), 2))
+      Transformer(insns).registers mustEqual Map(Register(0) -> ShiftRight(Input(Register(1)), Constant(2)))
+    }
+  }
   "SUBU" should {
     "become SubtractUnsigned" >> {
       val insns = List(

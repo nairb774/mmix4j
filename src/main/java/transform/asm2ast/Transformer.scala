@@ -60,6 +60,7 @@ class Transformer private (
     case SETL(dest, value) => assign(dest -> Constant(value.toLong & 0xFFFFL))
     case SLU(dest, number, amount) => assign(dest -> ShiftLeftUnsigned(registers(number), registers(amount)))
     case SLUI(dest, number, amount) => assign(dest -> ShiftLeftUnsigned(registers(number), Constant(amount)))
+    case SRI(dest, number, amount) => assign(dest -> ShiftRight(registers(number), Constant(amount)))
     case SUBU(dest, l, r) => assign(dest -> SubtractUnsigned(registers(l), registers(r)))
     case SUBUI(dest, src, constant) => assign(dest -> SubtractUnsigned(registers(src), Constant(constant)))
     case _ => throw new IllegalArgumentException("Unknown ASM instruction: " + insn)
