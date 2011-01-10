@@ -51,6 +51,7 @@ class Transformer private (
         SpecialRegister.rR -> ConditionallySetIfGreater(denominator, rD, ModUnsigned(rD, numerator, denominator), numerator))
     case GET(dest, src) => assign(dest -> specialRegisters(src))
     case GETA(dest, label) => assign(dest -> GetAddress(label))
+    case JMP(label) => copy(pinned = pinned ::: List(Jump(label)))
     case NEGU(dest, l, r) => assign(dest -> SubtractUnsigned(Constant(l), registers(r)))
     case PUT(dest, src) => special(dest -> registers(src))
     case SET(dest, src) => assign(dest -> registers(src))

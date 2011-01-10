@@ -90,6 +90,13 @@ object TransformerSpec extends Specification {
       Transformer(insns).registers mustEqual Map(Register(0) -> GetAddress(Label("A")))
     }
   }
+  "JMP" should {
+    "result in a pinned Jump" >> {
+      val insns = List(
+        JMP(Label("A")))
+      Transformer(insns).pinned.last mustEqual Jump(Label("A"))
+    }
+  }
   "NEGU" should {
     "become SubtractUnsigned" >> {
       val insns = List(
