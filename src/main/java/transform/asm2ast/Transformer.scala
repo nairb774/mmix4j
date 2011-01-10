@@ -37,10 +37,10 @@ class Transformer private (
     case ADDUI(dest, src, constant) => assign(dest -> AddUnsigned(registers(src), Constant(constant)))
     case Diverge(insn, ifFalse) =>
       insn match {
-        case BZ(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfZero(registers(reg), ifTrue, ifFalse)))
-        case PBN(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfNegative(registers(reg), ifTrue, ifFalse)))
-        case PBNZ(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfNonZero(registers(reg), ifTrue, ifFalse)))
-        case PBP(reg, ifTrue) => copy(pinned = pinned ::: List(BranchIfPositive(registers(reg), ifTrue, ifFalse)))
+        case BZ(reg, ifTrue) => pin(BranchIfZero(registers(reg), ifTrue, ifFalse))
+        case PBN(reg, ifTrue) => pin(BranchIfNegative(registers(reg), ifTrue, ifFalse))
+        case PBNZ(reg, ifTrue) => pin(BranchIfNonZero(registers(reg), ifTrue, ifFalse))
+        case PBP(reg, ifTrue) => pin(BranchIfPositive(registers(reg), ifTrue, ifFalse))
       }
     case DIVU(dest, n, d) =>
       val rD = specialRegisters(SpecialRegister.rD)
@@ -51,10 +51,10 @@ class Transformer private (
         SpecialRegister.rR -> ConditionallySetIfGreater(denominator, rD, ModUnsigned(rD, numerator, denominator), numerator))
     case GET(dest, src) => assign(dest -> specialRegisters(src))
     case GETA(dest, label) => assign(dest -> GetAddress(label))
-    case JMP(label) => copy(pinned = pinned ::: List(Jump(label)))
+    case JMP(label) => pin(Jump(label))
     case NEGU(dest, l, r) => assign(dest -> SubtractUnsigned(Constant(l), registers(r)))
-    case POP(0) => copy(pinned = pinned ::: List(Return0))
-    case POP(1) => copy(pinned = pinned ::: List(Return1(registers(Register(0)))))
+    case POP(0) => pin(Return0)
+    case POP(1) => pin(Return1(registers(Register(0))))
     case PUT(dest, src) => special(dest -> registers(src))
     case SET(dest, src) => assign(dest -> registers(src))
     case SETL(dest, value) => assign(dest -> Constant(value.toLong & 0xFFFFL))
@@ -68,4 +68,5 @@ class Transformer private (
 
   private def assign(tuple: (Register, AST)): Transformer = copy(registers = registers + tuple)
   private def special(tuple: (SpecialRegister.Value, AST)): Transformer = copy(specialRegisters = specialRegisters + tuple)
+  private def pin(ast: AST) = copy(pinned = pinned ::: List(ast))
 }
