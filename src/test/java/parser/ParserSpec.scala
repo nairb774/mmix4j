@@ -167,8 +167,8 @@ object ParserSpec extends Specification {
     parse("PUT rJ,$9", PUT(SpecialRegister.rJ, Register(9)))
   }
   "POP" should {
-    parse("POP 0,0", POP(Register(0)))
-    parse("POP 1,0", POP(Register(1)))
+    parse("POP 0,0", POP(0))
+    parse("POP 1,0", POP(1))
   }
   "SET" should {
     parse("SET $0,$5", SET(Register(0), Register(5)))

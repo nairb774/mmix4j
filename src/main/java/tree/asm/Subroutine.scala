@@ -1,7 +1,7 @@
 package tree.asm
 
 /** pop (3) rJ,rL */
-case class POP(reg: Register) extends ASM
+case class POP(count: Int) extends ASM
 
 /** push registers and go (1) rJ,rL */
 case class PUSHGO(reg: Register, dest: Register) extends ASM

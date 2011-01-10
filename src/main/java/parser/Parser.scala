@@ -109,7 +109,7 @@ object Parser extends StandardTokenParsers {
   def pop = "POP" ~> numericLit ~ "," ~ numericLit ^^ {
     case a ~ _ ~ b =>
       if (b.toInt != 0) throw new IllegalArgumentException("POP can only be called with a 0 offset")
-      POP(Register(a.toInt))
+      POP(a.toInt)
   }
   def pushgo = "PUSHGO" ~> rrn { (reg, dest, offset) =>
     if (offset != 0) throw new IllegalArgumentException("PUSHGO can only be called with a 0 offset")
